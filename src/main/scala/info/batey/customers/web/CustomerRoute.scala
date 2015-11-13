@@ -30,13 +30,13 @@ trait CustomerRoute extends Directives with JsonSupport {
 
   val route =
     get {
-      path("rdd") {
+      path("events/all/count") {
         complete {
           val requestActor = system.actorOf(Props(classOf[CustomerApiActor], customerAccess))
           (requestActor ? CustomerEventCountQuery).mapTo[CustomerCount].map(_.count.toString)
         }
       } ~
-      path("sql") {
+      path("events/group/count") {
         complete {
           val requestActor = system.actorOf(Props(classOf[CustomerReportsActor], customerAccess))
           (requestActor ? EventCountQuery).mapTo[Seq[EventCount]]

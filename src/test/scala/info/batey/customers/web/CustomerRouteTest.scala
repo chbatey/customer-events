@@ -25,14 +25,14 @@ class CustomerRouteTest extends WordSpec with Matchers with ScalatestRouteTest w
   }
 
   "Customer events service" should {
-    "do something" in {
-      Get("/rdd") ~> customerRote.route ~> check {
+    "count all events" in {
+      Get("/events/all/count") ~> customerRote.route ~> check {
         responseAs[String] shouldEqual "1"
       }
     }
 
-    "do something else" in {
-      Get("/sql") ~> customerRote.route ~> check {
+    "group and count events" in {
+      Get("/events/group/count") ~> customerRote.route ~> check {
         responseAs[List[EventCount]] shouldEqual List()
       }
     }

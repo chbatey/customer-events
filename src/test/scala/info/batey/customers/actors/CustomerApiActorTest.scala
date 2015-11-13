@@ -25,6 +25,7 @@ class CustomerApiActorTest extends TestKit(ActorSystem("CustomerApiActorTest"))
           expectMsg(CustomerCount(1L))
         }
 
+
       it("should send QueryFail if fails") {
         val customerAccess = new CustomerAccess {
           def eventCount(): Future[Long] = Future.failed(new RuntimeException("Oh Dear"))

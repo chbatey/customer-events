@@ -2,11 +2,11 @@ package info.batey.customers.actors
 
 import akka.actor.{ActorLogging, Actor}
 import info.batey.customers.actors.CustomerApiActor.{QueryFailed, CustomerCount, CustomerEventCountQuery}
-import info.batey.customers.infrastructure.CustomerAccess
+import info.batey.customers.infrastructure.{CustomerDao, CustomerAccess}
 
 import scala.util.Failure
 
-class CustomerApiActor(customerAccess: CustomerAccess) extends Actor with ActorLogging {
+class CustomerApiActor(customerAccess: CustomerAccess, customerDao: CustomerDao) extends Actor with ActorLogging {
 
   import context.dispatcher
 

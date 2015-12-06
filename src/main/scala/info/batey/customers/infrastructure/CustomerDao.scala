@@ -33,7 +33,7 @@ class CassandraCustomerDao(session: Session, limit: Int) extends CustomerDao {
     })
 
     promise.future.map(_.all()
-      .map(r => CustomerEvent(r.getString("customerid"), r.getString("id"), r.getString("eventtype"), r.getString("staffid"))))
+      .map(r => CustomerEvent(r.getString("customerid"), r.getString("id"), r.getString("event_type"), r.getString("staffid"))))
       .map(_.toList)
   }
 }

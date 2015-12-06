@@ -24,20 +24,25 @@ object Main {
 class Main extends CustomerRoute with JsonSupport with LazyLogging {
 
   val configuration = Configuration(ConfigFactory.load())
-  val conf = new SparkConf(true)
-    .set("spark.cassandra.connection.host", configuration.cassandraHost)
+
+  // 1 - Create a Spark context
+  val conf = new SparkConf(true).set("spark.cassandra.connection.host", configuration.cassandraHost)
   val sc = new SparkContext(configuration.sparkMaster, "customer-events", conf)
   val ssc = new CassandraSQLContext(sc)
   ssc.setKeyspace(configuration.cassandraKeyspace)
 
+  // 2 - Get hold of the Spark Actor system
   implicit val system = SparkEnv.get.actorSystem
 
+  // 3 - Create a streaming context
   val streamingContext = new StreamingContext(sc, Seconds(5))
+  streamingContext.checkpoint("./data")
   val stream = streamingContext.actorStream[CustomerEvent](Props(classOf[CustomerEventsActor]), "events-stream")
-  val streamProcessor = new StreamProcessor(stream)
-
+  val streamProcessor = new StreamProcessor(stream, configuration)
   streamingContext.start()
 
+
+  // 4 - NA
   val cluster = Cluster.builder().addContactPoint(configuration.cassandraHost).build()
   val session = cluster.connect(configuration.cassandraKeyspace)
   val customerAccess = CustomerAccess(sc, ssc)

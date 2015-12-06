@@ -26,12 +26,16 @@ class SparkCustomerAccess(sc: SparkContext, ssc: CassandraSQLContext) extends Cu
     sc.cassandraTable("test", "events").countAsync()
   }
 
+  //todo pure spark rdd job
+
   def eventGroup(): Future[Seq[EventCount]] = {
     logger.info("I should execute some Spark SQL")
-    val rdd = ssc.sql("select eventtype, count(*) as type_count from events group by eventtype ").rdd
+    val rdd = ssc.sql("select event_type, count(*) as type_count from events group by event_type").rdd
     rdd.collectAsync()
       .map((rows: Seq[Row]) => rows
-      .map((row: Row) => EventCount(row.getAs[String]("eventtype"), row.getAs[Long]("type_count"))))
+        .map((row: Row) => EventCount(
+                              row.getAs[String]("eventtype"),
+                              row.getAs[Long]("type_count"))))
   }
 }
 

@@ -24,7 +24,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka"           %% "akka-actor"                             % akkaVersion,
   "com.typesafe.akka"           %% "akka-http-experimental"                 % akkaHttpVersion,
   "com.typesafe.akka"           %% "akka-http-spray-json-experimental"      % akkaHttpVersion,
+  "com.typesafe.akka"           %% "akka-http-testkit-experimental"         % akkaHttpVersion   % "test",
   "com.typesafe.akka"           %% "akka-testkit"                           % akkaVersion       % "test",
   "org.scalatest"               %% "scalatest"                              % "2.2.4"           % "test",
-  "com.typesafe.akka"           %% "akka-http-testkit-experimental"         % akkaHttpVersion   % "test"
+  "org.cassandraunit"           %  "cassandra-unit"                         % "2.1.9.2"         % "test"
 )

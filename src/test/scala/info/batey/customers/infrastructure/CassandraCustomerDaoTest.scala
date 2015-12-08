@@ -16,9 +16,9 @@ class CassandraCustomerDaoTest extends FunSpec with BeforeAndAfterAll
 
   override protected def beforeAll(): Unit = {
     cluster = Cluster.builder().addContactPoint("localhost").build()
-    cluster.connect().execute("CREATE KEYSPACE IF NOT EXISTS uevents WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 }")
-    session = cluster.connect("test")
-    session.execute("CREATE TABLE IF NOT EXISTS events (customerId text, when timeuuid, id text, eventType text, staffid text,  PRIMARY KEY (customerid, when, id))")
+    cluster.connect().execute("CREATE KEYSPACE IF NOT EXISTS itest WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 }")
+    session = cluster.connect("itest")
+    session.execute("CREATE TABLE IF NOT EXISTS events (customerId text, when timeuuid, id text, event_type text, staffid text,  PRIMARY KEY (customerid, when, id))")
   }
 
   override protected def afterAll(): Unit = {
@@ -33,7 +33,7 @@ class CassandraCustomerDaoTest extends FunSpec with BeforeAndAfterAll
   describe("Something") {
     it("should definitely do something") {
 
-      session.execute("insert into events (customerid, when , id , eventtype , staffid ) VALUES ( 'chbatey', now(), '1', 'BUY', 'trevor' )")
+      session.execute("insert into events (customerid, when , id , event_type , staffid ) VALUES ( 'chbatey', now(), '1', 'BUY', 'trevor' )")
       val underTest = CustomerDao(session)
 
       val events: Future[List[CustomerEvent]] = underTest.customerEvents("chbatey")
